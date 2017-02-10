@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>New Wall</title>
+</head>
+<body>
+    <h1>Dashboard page</h1>
+    {% for user in users %}
+      <p>{{ user.email }}</p>
+      <p>{{ user.first_name }} {{ user.last_name }}</p>
+      <p>{{ user.password }}</p>
+    {% endfor %}
+    <a href="{% url 'register' %}">Exit</a>
+
+</body>
+</html>
