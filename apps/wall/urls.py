@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^dashboard$', views.dashboard, name='dashboard'),
     url(r'^show$', views.show, name='show'),
     url(r'^edit$', views.edit, name='edit'),
+    url(r'^logout$', views.logout, name='logout'),
 
   ]

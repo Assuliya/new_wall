@@ -6,6 +6,12 @@
 </head>
 <body>
     <h1>Index page</h1>
+    {% if request.session.id %}
+      <h3>Hi user {{ request.session.id }}</h3>
+      <a href="{% url 'logout' %}">Logout</a>
+      <br><br>
+    {% endif %}
     <a href="{% url 'login' %}">Start</a>
+
 </body>
 </html>

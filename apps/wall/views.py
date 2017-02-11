@@ -10,7 +10,8 @@ class Form(View):
     form_type = ''
 
     def get(self, request):
-        print self.form_action
+        if 'id' in request.session:
+            return redirect(reverse('dashboard'))
         form = self.form_type()
         context = {'form' : form}
         template = 'wall/' +self.form_action+ '.html'
@@ -21,6 +22,8 @@ class Form(View):
         if form.is_valid():
             if self.form_action == 'register':
                 form.save()
+            user = User.objects.get(email=request.POST['email'])
+            request.session['id'] = user.id
             return redirect(reverse('dashboard'))
         else:
             context = {'form' : form}
@@ -31,10 +34,10 @@ def index(request):
     return render(request, 'wall/index.html')
 
 def dashboard(request):
+    if 'id' in request.session:
+        print request.session['id']
     users = User.objects.all()
-    context = {
-    'users': users
-    }
+    context = {'users': users}
     return render(request, 'wall/dashboard.html', context)
 
 def show(request):
@@ -42,3 +45,8 @@ def show(request):
 
 def edit(request):
     return render(request, 'wall/edit.html')
+
+def logout(request):
+    print 'hi'
+    request.session.delete()
+    return redirect(reverse('index'))
