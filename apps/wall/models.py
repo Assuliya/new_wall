@@ -8,13 +8,9 @@ def moreThanTwo(value):
               'Must be longer than 2'
           )
 
-def uniqueEmail(value):
-    match = User.objects.filter(email=value)
-    if match:
-        raise ValidationError("This email address already exists")
 
 class User(models.Model):
-    email = models.EmailField(max_length=255, validators = [uniqueEmail])
+    email = models.EmailField(max_length=255)
     first_name = models.CharField(max_length=255, validators = [moreThanTwo])
     last_name = models.CharField(max_length=255, validators = [moreThanTwo])
     password = models.CharField(max_length=255, validators = [moreThanTwo])
