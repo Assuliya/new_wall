@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import View
-from .forms import RegisterForm, LoginForm, PostForm
+from .forms import RegisterForm, LoginForm, PostForm, CommentForm
 from .models import User, Post, Comment
 import bcrypt
 
@@ -40,8 +40,15 @@ def admin(request):
 
 def dashboard(request):
     posts = Post.objects.all()
-    form = PostForm(request.POST)
-    context = {'posts': posts, 'form' : form}
+    comments = Comment.objects.all()
+    post_form = PostForm(request.POST)
+    comment_form = CommentForm(request.POST)
+    context = {
+        'posts': posts,
+        'comments': comments,
+        'post_form' : post_form,
+        'comment_form': comment_form
+    }
     return render(request, 'wall/dashboard.html', context)
 
 def show(request):
@@ -57,7 +64,7 @@ def logout(request):
 
 def delete(request, user_id):
     if request.method == "POST":
-        user = User.objects.filter(id=user_id).delete()
+        User.objects.filter(id=user_id).delete()
     return redirect(reverse('dashboard'))
 
     # if request.method == "POST":
@@ -67,12 +74,35 @@ def delete(request, user_id):
     # return redirect(reverse('dashboard'))
 
 def add_post(request):
-    form = PostForm(request.POST)
-    if form.is_valid():
-        x = form.save(commit=False)
+    post_form = PostForm(request.POST)
+    if post_form.is_valid():
+        x = post_form.save(commit=False)
         x.user = User.objects.get(id=request.session['id'])
         x.save()
         return redirect(reverse('dashboard'))
     else:
-        context = {'form' : form}
+        context = {'post_form' : post_form}
         return redirect(reverse('dashboard'), context)
+
+def delete_post(request, post_id):
+    if request.method == "POST":
+        Post.objects.filter(id=post_id).delete()
+    return redirect(reverse('dashboard'))
+
+
+def add_comment(request, post_id):
+    comment_form = CommentForm(request.POST)
+    if comment_form.is_valid():
+        x = comment_form.save(commit=False)
+        x.user = User.objects.get(id=request.session['id'])
+        x.post = Post.objects.get(id=post_id)
+        x.save()
+        return redirect(reverse('dashboard'))
+    else:
+        context = {'comment_form' : comment_form}
+        return redirect(reverse('dashboard'), context)
+
+def delete_comment(request, comment_id):
+    if request.method == "POST":
+        Comment.objects.filter(id=comment_id).delete()
+    return redirect(reverse('dashboard'))

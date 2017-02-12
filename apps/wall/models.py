@@ -28,7 +28,7 @@ class Post(models.Model):
     #     return u"%s" % (self.post)
 
 class Comment(models.Model):
-    comment = models.TextField(max_length=1000)
+    comment = models.CharField(max_length=1000)
     user = models.ForeignKey(User)
     post = models.ForeignKey(Post)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -62,11 +62,8 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ('post',)
-    # def clean_user_id(self):
-    #     data = self.cleaned_data
-    #     try:
-    #         data['user_id'] = User.objects.get(id=request.session['id'])
-    #         print ('user is good')
-    #         return data['user_id']
-    #     except ObjectDoesNotExist:
-    #         raise ValidationError("You are not logged in")
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('comment',)

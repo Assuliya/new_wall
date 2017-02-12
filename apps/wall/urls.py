@@ -15,5 +15,8 @@ urlpatterns = [
     url(r'^logout$', views.logout, name='logout'),
     url(r'^delete/(?P<user_id>\d+)$', views.delete, name='delete'),
     url(r'^add_post$', views.add_post, name='add_post'),
+    url(r'^delete_post/(?P<post_id>\d+)$', views.delete_post, name='delete_post'),
+    url(r'^add_comment/(?P<post_id>\d+)$', views.add_comment, name='add_comment'),
+    url(r'^delete_comment/(?P<comment_id>\d+)$', views.delete_comment, name='delete_comment'),
 
   ]
