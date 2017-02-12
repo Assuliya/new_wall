@@ -6,12 +6,17 @@
 </head>
 <body>
     <h1>Dashboard page</h1>
-    {% for user in users %}
-      <p>{{ user.email }}</p>
-      <p>{{ user.first_name }} {{ user.last_name }}</p>
-      <p>{{ user.password }}</p>
-    {% endfor %}
-    <a href="{% url 'logout' %}">Logout</a>
+    {% for post in posts %}
+      <p>{{ post.post }}</p>
+      <p>{{ post.user.first_name }} {{ post.user.last_name }}</p>
+      <p>{{ post.id }}</p>
 
+    {% endfor %}
+    <form class="" action="{% url 'add_post' %}" method="post">
+       {% csrf_token %}
+       {{form.as_p}}
+       <input type="submit" value="post">
+    </form>
+    <a href="{% url 'logout' %}">Logout</a>
 </body>
 </html>

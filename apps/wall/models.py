@@ -21,17 +21,17 @@ class User(models.Model):
 
 class Post(models.Model):
     post = models.TextField()
-    user_id = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    def __unicode__(self):
-        return u"%s" % (self.title)
+    # def __unicode__(self):
+    #     return u"%s" % (self.post)
 
 class Comment(models.Model):
     comment = models.TextField(max_length=1000)
-    user_id = models.ForeignKey(User)
-    post_id = models.ForeignKey(Post)
+    user = models.ForeignKey(User)
+    post = models.ForeignKey(Post)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    def __unicode__(self):
-        return u"%s" % (self.comment)
+    # def __unicode__(self):
+    #     return u"%s" % (self.comment)
