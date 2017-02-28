@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import View
-from .forms import RegisterForm, LoginForm, PostForm, CommentForm
+from .forms import RegisterForm, LoginForm, EditForm, PostForm, CommentForm
 from .models import User, Post, Comment
 import bcrypt
 
@@ -51,11 +52,39 @@ def dashboard(request):
     }
     return render(request, 'wall/dashboard.html', context)
 
-def show(request):
-    return render(request, 'wall/show.html')
+def show(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except ObjectDoesNotExist:
+        return redirect(reverse('dashboard'))
+    context = {'user':user}
+    print(user)
 
-def edit(request):
-    return render(request, 'wall/edit.html')
+    return render(request, 'wall/show.html', context)
+
+def edit(request, user_id):
+    if request.session['id'] == int(user_id):
+        try:
+            my_record = User.objects.get(id=user_id)
+        except ObjectDoesNotExist:
+            print "doesn't exist"
+            return redirect(reverse('dashboard'))
+        if request.method == "GET":
+            form = EditForm(instance=my_record)
+        if request.method == "POST":
+            form = EditForm(request.POST, instance=my_record)
+            if form.is_valid():
+                print "hurray!"
+                form.save()
+                return redirect(reverse('show', kwargs={'user_id':user_id}))                
+        context = {'form' : form, 'user':my_record}
+        print(my_record)
+        return render(request, 'wall/edit.html', context)
+
+
+    return redirect(reverse('dashboard'))
+
+
 
 def logout(request):
     print 'hi'

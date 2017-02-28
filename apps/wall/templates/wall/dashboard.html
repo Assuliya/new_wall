@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Dashboard page</h1>
+    <a href="{% url 'show' user_id=request.session.id%}">My Page</a>
     {% for post in posts %}
       <p>{{ post.post }}</p>
       <p>{{ post.user.first_name }} {{ post.user.last_name }}</p>

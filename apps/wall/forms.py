@@ -57,6 +57,35 @@ class LoginForm(forms.ModelForm):
             raise ValidationError("The Password is wrong")
         return data['password']
 
+class EditForm(forms.ModelForm):
+    old_password = forms.CharField(max_length=100, widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = '__all__'
+        widgets = {
+            'password': forms.PasswordInput(),
+        }
+
+    def clean(self):
+        super(forms.ModelForm, self).clean()
+        data = self.cleaned_data
+        print data
+        if self.is_valid():
+            user = User.objects.get(email=data['email'])
+            saved = user.password.encode()
+            testing = data['old_password'].encode()
+            if bcrypt.hashpw(testing, saved) == saved:
+                print ('all good')
+                if not PASS_REGEX.match(data['password']):
+                    raise ValidationError('New Password should contain at least one apper case letter and one number')
+                else:
+                    data['password'] = bcrypt.hashpw(data['password'].encode(), bcrypt.gensalt())
+                    return data
+            raise ValidationError("The Old Password is wrong")
+        return data
+
+
 
 class PostForm(forms.ModelForm):
     class Meta:

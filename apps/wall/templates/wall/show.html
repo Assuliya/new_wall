@@ -6,6 +6,17 @@
 </head>
 <body>
     <h1>Show page</h1>
-    <a href="{% url 'edit' %}">Edit</a>
+    {% if request.session.id == user.id %}
+      <h3>Welcome to your page</h3>
+      <a href="{% url 'logout' %}">Logout</a>
+      <br><br>
+    {% endif %}
+    <h2>{{ user.id }}</h2>
+    <p>{{ user.email }}</p>
+    <p>{{ user.first_name }} {{ user.last_name }}</p>
+    <p>{{ user.password }}</p>
+    <a href="{% url 'edit' user_id=user.id%}">Edit</a>
+    <a href="{% url 'index' %}">Home</a>
+
 </body>
 </html>

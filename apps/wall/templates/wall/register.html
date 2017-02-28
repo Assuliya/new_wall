@@ -7,12 +7,11 @@
 <body>
     <h1>Register page</h1>
     <form class="" action="{% url 'register' %}" method="post">
-     {% csrf_token %}
-     {{form.as_p}}
-     <input type="submit" value="register">
+      {% csrf_token %}
+      {{form.as_p}}
+      <input type="submit" value="register">
    </form>
    <br>
-   <a href="{% url 'index' %}">main</a>
-
+   <a href="{% url 'index' %}">Home</a>
 </body>
 </html>
